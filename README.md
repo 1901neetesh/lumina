@@ -38,7 +38,7 @@ The interface uses a custom design system focused on "Athletic Minimalism":
 ## // DEPLOYMENT
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 # SYSTEM READY AT LOCALHOST:3000
 ```
