@@ -52,25 +52,33 @@ export async function POST(request: Request) {
             tags: ["gym", "male", "build_muscle"],
             styleName: "Iron Rebel",
             items: ["Oversized Pump Cover", "5-inch Squat Shorts", "Flat-sole Converse"],
-            colorPalette: ["#1C1C1C", "#8B0000", "#FFFFFF"]
+            colorPalette: ["#1C1C1C", "#8B0000", "#FFFFFF"],
+            imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=1200&fit=crop&crop=center",
+            altText: "Muscular man in black gym wear with red accents lifting weights"
         },
         {
             tags: ["outdoor", "female", "lose_weight"],
             styleName: "Trail Blazer",
             items: ["Wind-resistent Crop", "Compressed Leggings", "Trail Runners"],
-            colorPalette: ["#2F4F4F", "#00FF9C", "#1A1A1A"]
+            colorPalette: ["#2F4F4F", "#00FF9C", "#1A1A1A"],
+            imageUrl: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=800&h=1200&fit=crop&crop=center",
+            altText: "Athletic woman running on forest trail in sportswear"
         },
         {
             tags: ["home", "tone"],
             styleName: "Zen Tech",
             items: ["Seamless Bodysuit", "Grippy Socks", "Loose Throw-over"],
-            colorPalette: ["#B0C4DE", "#FFD700", "#F0F8FF"]
+            colorPalette: ["#B0C4DE", "#FFD700", "#F0F8FF"],
+            imageUrl: "https://images.unsplash.com/photo-1506629905607-8b6d34b5db08?w=800&h=1200&fit=crop&crop=center",
+            altText: "Woman in comfortable home workout attire doing yoga"
         },
         {
             tags: ["event"],
             styleName: "Athleisure Prime",
             items: ["Dri-fit Polo", "Tapered Chinos", "Minimalist Leather Sneakers"],
-            colorPalette: ["#000080", "#C0C0C0", "#FFFFFF"]
+            colorPalette: ["#000080", "#C0C0C0", "#FFFFFF"],
+            imageUrl: "https://images.unsplash.com/photo-1506629905607-8b6d34b5db08?w=800&h=1200&fit=crop&crop=center",
+            altText: "Stylish person in premium athleisure wear for social events"
         }
     ];
 
@@ -88,7 +96,9 @@ export async function POST(request: Request) {
         fashion: {
             styleName: fashion.styleName,
             items: fashion.items,
-            colorPalette: fashion.colorPalette
+            colorPalette: fashion.colorPalette,
+            imageUrl: fashion.imageUrl,
+            altText: fashion.altText
         }
     });
 }

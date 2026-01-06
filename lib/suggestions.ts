@@ -16,6 +16,8 @@ export type Recommendation = {
         styleName: string;
         items: string[];
         colorPalette: string[];
+        imageUrl: string;
+        altText: string;
     };
 };
 
@@ -45,7 +47,9 @@ export async function getRecommendation(input: UserInput): Promise<Recommendatio
             fashion: {
                 styleName: "Default Protocol",
                 items: ["Standard Issue Tee", "Grey Sweatpants", "Running Shoes"],
-                colorPalette: ["#333", "#666", "#999"]
+                colorPalette: ["#333", "#666", "#999"],
+                imageUrl: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=1200&fit=crop&crop=center",
+                altText: "Default athletic wear style"
             }
         };
     }

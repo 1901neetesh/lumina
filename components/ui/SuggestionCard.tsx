@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Share2, ExternalLink, Calendar, Info } from "lucide-react";
 import html2canvas from "html2canvas";
 import { Recommendation } from "@/lib/suggestions";
+import { HapticFeedback } from "@/lib/haptics";
 
 interface SuggestionCardProps {
     data: Recommendation;
@@ -12,6 +13,10 @@ interface SuggestionCardProps {
 }
 
 export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
+    const handleReset = () => {
+        HapticFeedback.trigger("medium");
+        onReset();
+    };
     const cardRef = useRef<HTMLDivElement>(null);
     const [isSharing, setIsSharing] = useState(false);
     const [showInsights, setShowInsights] = useState(false);
@@ -74,9 +79,9 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="w-full max-w-7xl mx-auto p-4 md:p-6 mb-8"
+            className="w-full max-w-7xl mx-auto p-3 sm:p-4 md:p-6 mb-6 sm:mb-8"
         >
-            <div ref={cardRef} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-px items-stretch bg-white/10 border border-white/10 rounded-3xl overflow-hidden relative group/card">
+            <div ref={cardRef} className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-px items-stretch bg-white/10 border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden relative group/card">
 
                 {/* Share Button Overlay */}
                 <motion.button
@@ -84,7 +89,7 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                     whileTap={{ scale: 0.9 }}
                     onClick={handleShare}
                     disabled={isSharing}
-                    className="absolute top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-white transition-colors"
+                    className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-50 p-2 sm:p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-white transition-colors"
                     title="Share Receipt"
                 >
                     {isSharing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Share2 size={20} />}
@@ -95,7 +100,7 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setShowInsights(!showInsights)}
-                    className="absolute top-4 left-4 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-brand-neon transition-colors md:hidden"
+                    className="absolute top-3 sm:top-4 left-3 sm:left-4 z-50 p-2 sm:p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-brand-neon transition-colors md:hidden"
                     title="AI Insights"
                 >
                     <Info size={20} />
@@ -107,7 +112,7 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-black p-8 md:p-12 relative overflow-hidden group min-h-[600px] flex flex-col justify-between"
+                    className="bg-black p-6 sm:p-8 md:p-12 relative overflow-hidden group min-h-[500px] sm:min-h-[600px] flex flex-col justify-between"
                 >
                     <div className="absolute inset-0 bg-noise opacity-20 pointer-events-none" />
 
@@ -133,11 +138,11 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                             </div>
                         </div>
 
-                        <h2 className="text-5xl md:text-7xl font-heading font-black text-white mb-8 uppercase leading-[0.8] italic tracking-tighter mix-blend-screen">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-heading font-black text-white mb-6 sm:mb-8 uppercase leading-[0.8] italic tracking-tighter mix-blend-screen">
                             {data.exercise.title}
                         </h2>
 
-                        <p className="text-xl text-neutral-400 font-mono leading-relaxed border-l-2 border-brand-neon pl-6 mb-12 max-w-md">
+                        <p className="text-base sm:text-lg md:text-xl text-neutral-400 font-mono leading-relaxed border-l-2 border-brand-neon pl-4 sm:pl-6 mb-8 sm:mb-12 max-w-md">
                             {data.exercise.description}
                         </p>
                     </div>
@@ -146,11 +151,11 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                     <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
                         <div>
                             <span className="block text-[10px] text-neutral-500 uppercase tracking-widest mb-2 font-mono">Duration</span>
-                            <span className="text-3xl text-white font-heading font-black italic">{data.exercise.duration}</span>
+                            <span className="text-xl sm:text-2xl md:text-3xl text-white font-heading font-black italic">{data.exercise.duration}</span>
                         </div>
                         <div>
                             <span className="block text-[10px] text-neutral-500 uppercase tracking-widest mb-2 font-mono">Intensity</span>
-                            <span className="text-3xl text-brand-neon font-heading font-black italic">{data.exercise.intensity}</span>
+                            <span className="text-xl sm:text-2xl md:text-3xl text-brand-neon font-heading font-black italic">{data.exercise.intensity}</span>
                         </div>
                     </div>
 
@@ -188,7 +193,7 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-[#fafafa] text-black p-8 md:p-12 relative overflow-hidden min-h-[600px] flex flex-col justify-between"
+                    className="bg-[#fafafa] text-black relative overflow-hidden min-h-[500px] sm:min-h-[600px] flex flex-col"
                 >
                     {/* Barcode Deco */}
                     <div className="absolute top-8 right-8 mix-blend-multiply opacity-40">
@@ -199,26 +204,62 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                         </div>
                     </div>
 
-                    <div>
-                        <div className="flex items-center gap-3 mb-10 border-b border-black pb-6">
+                    {/* Fashion Hero Image */}
+                    <div className="relative mb-6 sm:mb-8 px-6 sm:px-8 md:px-12">
+                        <div className="relative group">
+                            <div className="aspect-[4/5] w-full max-w-sm mx-auto overflow-hidden rounded-2xl shadow-2xl border-4 border-white/20 bg-gradient-to-br from-gray-100 to-gray-200">
+                                <img
+                                    src={data.fashion.imageUrl}
+                                    alt={data.fashion.altText}
+                                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-110 opacity-0 group-hover:opacity-100"
+                                    loading="lazy"
+                                    onLoad={(e) => {
+                                        e.currentTarget.style.opacity = '1';
+                                        e.currentTarget.previousElementSibling?.classList.add('opacity-0');
+                                    }}
+                                />
+
+                                {/* Loading shimmer effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shimmer_1.5s_infinite]" />
+                                </div>
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                                {/* Premium overlay effects */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-brand-neon/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
+                                    <span className="text-black text-xs font-bold animate-pulse">✨</span>
+                                </div>
+                            </div>
+
+                            {/* Floating style badge */}
+                            <div className="absolute -top-3 -right-3 bg-brand-neon text-black px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg transform scale-95 group-hover:scale-100 transition-transform duration-300">
+                                {data.fashion.styleName}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="px-6 sm:px-8 md:px-12 animate-in slide-in-from-bottom-4 duration-700 delay-300">
+                         <div className="flex items-center gap-3 mb-6 sm:mb-8 border-b border-black/20 pb-4">
                             <div className="w-2 h-2 bg-black rounded-full" />
                             <span className="text-xs font-mono text-black tracking-[0.2em] uppercase font-bold">
                                 Aesthetic_Loadout
                             </span>
                         </div>
 
-                        <h2 className="text-5xl md:text-7xl font-heading font-black text-black mb-10 uppercase leading-[0.8] italic tracking-tighter">
-                            {data.fashion.styleName}
-                        </h2>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-heading font-black text-black mb-8 sm:mb-10 uppercase leading-[0.8] italic tracking-tighter animate-in slide-in-from-bottom-4 duration-500 delay-500">
+                             {data.fashion.styleName}
+                         </h2>
 
-                        <ul className="grid gap-4 mb-12">
-                            {data.fashion.items.map((item, i) => (
-                                <li key={i} className="flex justify-between items-baseline border-b border-black/10 pb-3 group hover:pl-2 transition-all">
+                        <ul className="grid gap-3 sm:gap-4 mb-8 sm:mb-12 animate-in slide-in-from-bottom-4 duration-500 delay-700">
+                             {data.fashion.items.map((item, i) => (
+                                 <li key={i} className="flex justify-between items-baseline border-b border-black/10 pb-3 group hover:pl-2 hover:bg-black/5 rounded-lg px-2 -mx-2 transition-all duration-300">
                                     <a
                                         href={`https://www.google.com/search?q=${encodeURIComponent(item)}&tbm=shop`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-black font-bold uppercase tracking-tight text-lg md:text-xl truncate mr-4 flex items-center gap-2 hover:text-brand-neon hover:bg-black px-2 -ml-2 rounded transition-colors"
+                                        className="text-black font-bold uppercase tracking-tight text-base sm:text-lg md:text-xl truncate mr-2 sm:mr-4 flex items-center gap-2 hover:text-brand-neon hover:bg-black px-2 -ml-2 rounded transition-colors"
                                         title="Search user item"
                                     >
                                         {item}
@@ -230,17 +271,19 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                         </ul>
                     </div>
 
-                    <div className="flex gap-4 items-end">
-                        {data.fashion.colorPalette.map((color, i) => (
-                            <div key={i} className="group flex flex-col items-center gap-3">
-                                <div
-                                    className="w-12 h-12 border border-black/20 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover:-translate-y-1 group-hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
-                                    style={{ backgroundColor: color }}
-                                />
-                                <span className="text-[10px] font-mono text-black/50 uppercase tracking-wider">{color}</span>
-                            </div>
-                        ))}
-                    </div>
+                    <div className="flex gap-3 sm:gap-4 items-end justify-center animate-in slide-in-from-bottom-4 duration-500 delay-900">
+                         {data.fashion.colorPalette.map((color, i) => (
+                             <div key={i} className="group flex flex-col items-center gap-2 sm:gap-3">
+                                 <div
+                                     className="w-12 h-12 sm:w-14 sm:h-14 border-2 border-black/30 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] group-hover:scale-110 rounded-lg overflow-hidden"
+                                     style={{ backgroundColor: color }}
+                                 >
+                                     <div className="w-full h-full bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                 </div>
+                                 <span className="text-[8px] sm:text-[10px] font-mono text-black/60 uppercase tracking-wider group-hover:text-black transition-colors">{color}</span>
+                             </div>
+                         ))}
+                     </div>
                 </motion.div>
             </div>
 
@@ -251,8 +294,8 @@ export default function SuggestionCard({ data, onReset }: SuggestionCardProps) {
                 className="mt-12 text-center"
             >
                 <button
-                    onClick={onReset}
-                    className="group relative inline-flex items-center justify-center px-12 py-5 bg-brand-neon text-black font-heading font-black tracking-widest uppercase text-sm hover:-translate-y-1 hover:shadow-[0_0_40px_-10px_rgba(223,255,0,0.5)] transition-all duration-300 rounded-full"
+                    onClick={handleReset}
+                    className="group relative inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 md:px-12 md:py-5 bg-brand-neon text-black font-heading font-black tracking-widest uppercase text-sm sm:text-base hover:-translate-y-1 hover:shadow-[0_0_40px_-10px_rgba(223,255,0,0.5)] transition-all duration-300 rounded-full"
                 >
                     <span className="relative z-10">Initialize New Sequence</span>
                 </button>
