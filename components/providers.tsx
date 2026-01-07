@@ -1,13 +1,9 @@
-"use client";
-
-import { ThemeProvider } from "@/lib/theme";
-import { PWAInstall } from "@/components/pwa-install";
+import { IdentityProvider } from "@/components/providers/IdentityProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider>
-      <PWAInstall />
+    <IdentityProvider>
       {children}
-    </ThemeProvider>
+    </IdentityProvider>
   );
 }

@@ -20,11 +20,6 @@ export const metadata: Metadata = {
   title: "Lumina | Premium Lifestyle Architect",
   description: "Curated exercise and fashion guidance for the modern aesthete.",
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Lumina",
-  },
 };
 
 export const viewport = {
@@ -32,7 +27,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#00FF9C',
+  themeColor: '#DFFF00', // Volt
 };
 
 export default function RootLayout({
@@ -41,17 +36,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Lumina" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
+    <html lang="en" suppressHydrationWarning>
       <body className={cn(
         inter.variable,
         oswald.variable,
-        "bg-brand-black text-white antialiased overflow-hidden selection:bg-brand-volt selection:text-black"
+        "min-h-screen bg-background font-sans antialiased"
       )}>
         <Providers>
           {children}

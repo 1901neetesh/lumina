@@ -1,5 +1,7 @@
+export type Gender = "male" | "female" | "non-binary" | "gay" | "lesbian" | "bisexual" | "pansexual" | "transgender" | "queer" | "other";
+
 export type UserInput = {
-    gender: "male" | "female" | "non-binary";
+    gender: Gender;
     age: string;
     goal: "build_muscle" | "lose_weight" | "tone" | "endurance";
     occasion: "gym" | "outdoor" | "home" | "event";

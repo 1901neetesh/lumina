@@ -1,10 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { HistoryItem, getHistory } from "@/lib/history";
-import { X, Clock, ChevronRight } from "lucide-react";
+import { Clock, X } from "lucide-react";
 import { HapticFeedback } from "@/lib/haptics";
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface HistoryDrawerProps {
     isOpen: boolean;
@@ -12,78 +22,86 @@ interface HistoryDrawerProps {
 }
 
 export default function HistoryDrawer({ isOpen, onClose }: HistoryDrawerProps) {
-    const handleClose = () => {
-        HapticFeedback.trigger("light");
-        onClose();
-    };
     const [history, setHistory] = useState<HistoryItem[]>([]);
 
     useEffect(() => {
         if (isOpen) {
-            setHistory(getHistory());
+            const historyData = getHistory();
+            setHistory(historyData);
         }
     }, [isOpen]);
 
-    return (
-        <AnimatePresence>
-            {isOpen && (
-                <>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
-                    />
-                    <motion.div
-                        initial={{ x: "100%" }}
-                        animate={{ x: 0 }}
-                        exit={{ x: "100%" }}
-                        transition={{ type: "spring", damping: 20 }}
-                        className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#0a0a0a] border-l border-white/10 z-50 p-4 sm:p-6 overflow-y-auto shadow-2xl"
-                    >
-                        <div className="flex justify-between items-center mb-6 sm:mb-8">
-                            <h2 className="text-xl sm:text-2xl font-heading font-black uppercase text-white tracking-tight">
-                                Archives
-                            </h2>
-                            <button
-                                onClick={handleClose}
-                                className="p-2 hover:bg-white/10 rounded-full transition-colors text-white"
-                            >
-                                <X size={20} className="sm:w-6 sm:h-6" />
-                            </button>
-                        </div>
+    const handleClose = () => {
+        HapticFeedback.trigger("light");
+        onClose();
+    };
 
-                        <div className="space-y-3 sm:space-y-4">
-                            {history.length === 0 ? (
-                                <p className="text-neutral-500 font-mono text-center py-8 sm:py-10">No archives found.</p>
-                            ) : (
-                                history.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="bg-white/5 border border-white/10 p-3 sm:p-4 rounded-lg sm:rounded-xl hover:bg-white/10 transition-colors group cursor-default"
-                                    >
-                                        <div className="flex justify-between items-start mb-2">
-                                            <span className="font-heading font-bold text-white uppercase text-base sm:text-lg">
-                                                {item.recommendation.exercise.title}
-                                            </span>
-                                            <span className="text-[8px] sm:text-[10px] font-mono text-white/40 flex items-center gap-1">
-                                                <Clock size={8} className="sm:w-2.5 sm:h-2.5" />
-                                                {new Date(item.timestamp).toLocaleDateString()}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-brand-neon font-mono text-xs mb-3">
-                                            <span className="bg-brand-neon/10 px-2 py-1 rounded">
-                                                {item.recommendation.fashion.styleName}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))
-                            )}
+    return (
+        <Sheet open={isOpen} onOpenChange={handleClose}>
+            <SheetContent>
+                <SheetHeader className="border-b pb-4">
+                    <div className="flex justify-between items-center">
+                        <div className="space-y-1">
+                            <SheetTitle>Archives</SheetTitle>
+                            <SheetDescription>
+                                Your saved recommendations
+                            </SheetDescription>
                         </div>
-                    </motion.div>
-                </>
-            )}
-        </AnimatePresence>
+                        <Button variant="ghost" size="icon" onClick={handleClose}>
+                            <X className="w-4 h-4" />
+                        </Button>
+                    </div>
+                </SheetHeader>
+
+                <ScrollArea className="flex-1">
+                    <div className="space-y-3 py-4">
+                        {history.length === 0 ? (
+                            <Card>
+                                <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
+                                        <Clock className="w-6 h-6 text-muted-foreground" />
+                                    </div>
+                                    <p className="font-semibold">No archives yet</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Your recommendations will appear here
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            history.map((item) => (
+                                <Card key={item.id}>
+                                    <CardContent className="p-4">
+                                        <div className="flex justify-between items-start gap-4">
+                                            <div className="flex-1 space-y-2">
+                                                <p className="font-semibold">
+                                                    {item.recommendation.exercise.title}
+                                                </p>
+                                                <Badge>
+                                                    {item.recommendation.fashion.styleName}
+                                                </Badge>
+                                            </div>
+                                            <div className="flex items-center gap-1 text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                                                <Clock className="w-3 h-3" />
+                                                {new Date(item.timestamp).toLocaleDateString()}
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))
+                        )}
+                    </div>
+                </ScrollArea>
+
+                <div className="border-t pt-4">
+                    <Card>
+                        <CardContent className="p-4">
+                            <p className="text-xs text-center text-muted-foreground">
+                                {history.length} {history.length === 1 ? 'entry' : 'entries'} saved
+                            </p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </SheetContent>
+        </Sheet>
     );
 }
