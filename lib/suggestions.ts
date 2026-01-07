@@ -5,6 +5,14 @@ export type UserInput = {
     occasion: "gym" | "outdoor" | "home" | "event";
 };
 
+export type FashionStyle = {
+    styleName: string;
+    items: string[];
+    colorPalette: string[];
+    imageUrl: string;
+    altText: string;
+};
+
 export type Recommendation = {
     exercise: {
         title: string;
@@ -12,13 +20,8 @@ export type Recommendation = {
         duration: string;
         intensity: "High" | "Medium" | "Low";
     };
-    fashion: {
-        styleName: string;
-        items: string[];
-        colorPalette: string[];
-        imageUrl: string;
-        altText: string;
-    };
+    fashion: FashionStyle;
+    styleVariations?: FashionStyle[];
 };
 
 export async function getRecommendation(input: UserInput): Promise<Recommendation> {

@@ -16,6 +16,9 @@ const config: Config = {
                     neon: "#00FF9C", // Cyber Neon
                     dark: "#0A0A0A", // Secondary Black
                     surface: "rgba(255, 255, 255, 0.05)", // Glassmorphism base
+                    cool: "#00BFFF", // Cool blue
+                    warm: "#FF6B6B", // Warm red
+                    vibrant: "#9C27B0", // Vibrant purple
                 }
             },
             fontFamily: {

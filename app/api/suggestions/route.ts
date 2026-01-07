@@ -86,6 +86,24 @@ export async function POST(request: Request) {
     const exercise = exercises.find(e => e.tags.some(t => t === goal || t === occasion)) || exercises[0];
     const fashion = fashions.find(f => f.tags.some(t => t === occasion || t === gender)) || fashions[0];
 
+    // Generate style variations (mock AI creativity)
+    const styleVariations = [
+        {
+            styleName: "Classic " + fashion.styleName,
+            items: fashion.items.map(item => item.replace(/Oversized|Wind-resistent|Seamless|Dri-fit/, "Classic")),
+            colorPalette: ["#2C2C2C", "#A9A9A9", "#FFFFFF"],
+            imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=1200&fit=crop&crop=center",
+            altText: "Classic variation of the style"
+        },
+        {
+            styleName: "Bold " + fashion.styleName,
+            items: fashion.items.map(item => item.replace(/Pump|Crop|Bodysuit|Polo/, "Bold")),
+            colorPalette: ["#FF4500", "#FFD700", "#000000"],
+            imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=1200&fit=crop&crop=center",
+            altText: "Bold variation of the style"
+        }
+    ];
+
     return NextResponse.json({
         exercise: {
             title: exercise.title,
@@ -99,6 +117,7 @@ export async function POST(request: Request) {
             colorPalette: fashion.colorPalette,
             imageUrl: fashion.imageUrl,
             altText: fashion.altText
-        }
+        },
+        styleVariations
     });
 }

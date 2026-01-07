@@ -11,6 +11,7 @@ import HistoryDrawer from "@/components/features/HistoryDrawer";
 import VoiceInput from "@/components/features/VoiceInput";
 import AudioController from "@/components/features/AudioController";
 import SettingsModal from "@/components/features/SettingsModal";
+import { Input } from "@/components/ui/input";
 import { History, Settings } from "lucide-react";
 
 type Step = "gender" | "age" | "goal" | "occasion" | "result";
@@ -55,6 +56,12 @@ export default function Home() {
   useEffect(() => {
     localStorage.setItem("lumina_settings", JSON.stringify(settings));
   }, [settings]);
+
+  const reset = () => {
+    setStep("gender");
+    setResult(null);
+    setIsGenerating(false);
+  };
 
   // Keyboard Navigation
   useEffect(() => {
@@ -128,12 +135,6 @@ export default function Home() {
     }
   };
 
-  const reset = () => {
-    setStep("gender");
-    setResult(null);
-    setIsGenerating(false);
-  };
-
   // Pass settings to HapticButton (need to update HapticButton to accept disableHaptic, or just wrap onClick)
   // For now, simple HapticButton implementation uses onClick usually.
   // Actually, HapticButton likely has its own vibrate call which I should probably override or remove.
@@ -147,118 +148,118 @@ export default function Home() {
       <div className="fixed inset-0 bg-noise opacity-30 pointer-events-none mix-blend-overlay z-0" />
       <div className="fixed top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-neon/50 to-transparent z-0" />
 
-      {/* Brand Header */}
-      <header className="w-full px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-6 z-50 relative flex justify-between items-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black uppercase tracking-tighter italic transform -skew-x-12 origin-left">
-          Lumina <span className="text-brand-neon text-xs sm:text-sm align-top ml-1 not-italic skew-x-0 inline-block bg-white/10 px-1 rounded">V2</span>
-        </h1>
+       {/* Brand Header */}
+       <header className="w-full px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-6 z-50 relative flex justify-between items-center min-h-[60px]">
+         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-black uppercase tracking-tighter italic transform -skew-x-12 origin-left">
+           Lumina <span className="text-xs sm:text-sm align-top ml-1 not-italic skew-x-0 inline-block bg-white/10 px-1 py-0.5 rounded text-[10px] sm:text-xs">V2</span>
+         </h1>
 
-        <div className="flex gap-2 sm:gap-3 md:gap-4 items-center">
-          <VoiceInput onResult={handleVoiceCommand} />
+         <div className="flex gap-2 sm:gap-3 md:gap-4 items-center">
+           <VoiceInput onResult={handleVoiceCommand} />
 
-          <button
-            onClick={() => {
-              if (settings.haptics) HapticFeedback.trigger("light");
-              setIsSettingsOpen(true);
-            }}
-            className="p-2 sm:p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors text-white"
-          >
-            <Settings size={16} className="sm:w-5 sm:h-5" />
-          </button>
+           <button
+             onClick={() => {
+               if (settings.haptics) HapticFeedback.trigger("light");
+               setIsSettingsOpen(true);
+             }}
+             className="p-3 sm:p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors text-white min-w-[44px] min-h-[44px] flex items-center justify-center"
+           >
+             <Settings size={18} className="sm:w-5 sm:h-5" />
+           </button>
 
-          <button
-            onClick={() => {
-              if (settings.haptics) HapticFeedback.trigger("light");
-              setIsHistoryOpen(true);
-            }}
-            className="p-2 sm:p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors text-white"
-          >
-            <History size={16} className="sm:w-5 sm:h-5" />
-          </button>
-        </div>
-      </header>
+           <button
+             onClick={() => {
+               if (settings.haptics) HapticFeedback.trigger("light");
+               setIsHistoryOpen(true);
+             }}
+             className="p-3 sm:p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors text-white min-w-[44px] min-h-[44px] flex items-center justify-center"
+           >
+             <History size={18} className="sm:w-5 sm:h-5" />
+           </button>
+         </div>
+       </header>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 sm:px-6 sm:py-8 w-full max-w-7xl mx-auto relative z-10 pb-20 sm:pb-24">
+       {/* Main Content Area */}
+       <div className="flex-1 flex flex-col items-center justify-center px-4 py-4 sm:px-6 sm:py-6 md:py-8 w-full max-w-7xl mx-auto relative z-10 pb-24 sm:pb-28">
         <AnimatePresence mode="wait">
           {step === "gender" && (
-            <motion.div
-              key="gender"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-              className="text-center space-y-6 sm:space-y-8 w-full max-w-md bg-black/40 backdrop-blur-xl p-6 sm:p-8 border border-white/10 rounded-2xl sm:rounded-3xl"
-            >
-              <h2 className="text-2xl sm:text-3xl md:text-5xl font-heading font-black uppercase tracking-tight">Identify</h2>
-              <div className="grid grid-cols-1 gap-4">
-                <HapticButton onClick={() => handleNext("gender", "male")}>Male</HapticButton>
-                <HapticButton onClick={() => handleNext("gender", "female")}>Female</HapticButton>
-                <HapticButton onClick={() => handleNext("gender", "non-binary")}>Non-Binary</HapticButton>
-              </div>
-            </motion.div>
+             <motion.div
+               key="gender"
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+               className="text-center space-y-5 sm:space-y-6 md:space-y-8 w-full max-w-sm sm:max-w-md bg-black/40 backdrop-blur-xl p-5 sm:p-6 md:p-8 border border-white/10 rounded-2xl sm:rounded-3xl mx-2"
+             >
+               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading font-black uppercase tracking-tight">Identify</h2>
+               <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                 <HapticButton onClick={() => handleNext("gender", "male")}>Male</HapticButton>
+                 <HapticButton onClick={() => handleNext("gender", "female")}>Female</HapticButton>
+                 <HapticButton onClick={() => handleNext("gender", "non-binary")}>Non-Binary</HapticButton>
+               </div>
+             </motion.div>
           )}
 
           {step === "age" && (
-            <motion.div
-              key="age"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-              className="text-center space-y-6 sm:space-y-8 w-full max-w-md bg-black/40 backdrop-blur-xl p-6 sm:p-8 border border-white/10 rounded-2xl sm:rounded-3xl"
-            >
-              <h2 className="text-2xl sm:text-3xl md:text-5xl font-heading font-black uppercase tracking-tight">Chronology</h2>
-              <div className="flex flex-col gap-6">
-                <input
-                  type="number"
-                  placeholder="00"
-                  className="bg-black/50 border-2 border-white/10 text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl py-4 sm:py-6 focus:outline-none focus:border-brand-neon transition-all duration-300 text-brand-neon font-heading font-black placeholder:text-white/5 w-full rounded-xl sm:rounded-2xl"
-                  defaultValue={formData.age}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleNext("age", e.currentTarget.value);
-                    }
-                  }}
-                  autoFocus
-                />
-                <p className="text-neutral-500 text-sm">Press Enter to confirm</p>
-              </div>
-            </motion.div>
+             <motion.div
+               key="age"
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+               className="text-center space-y-5 sm:space-y-6 md:space-y-8 w-full max-w-sm sm:max-w-md bg-black/40 backdrop-blur-xl p-5 sm:p-6 md:p-8 border border-white/10 rounded-2xl sm:rounded-3xl mx-2"
+             >
+               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading font-black uppercase tracking-tight">Chronology</h2>
+               <div className="flex flex-col gap-4 sm:gap-6">
+                 <Input
+                   type="number"
+                   placeholder="00"
+                   className="bg-black/50 border-2 border-white/10 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl py-3 sm:py-4 md:py-6 focus:outline-none focus:border-primary transition-all duration-300 text-primary font-heading font-black placeholder:text-white/5 w-full rounded-xl sm:rounded-2xl min-h-[60px] sm:min-h-[70px]"
+                   defaultValue={formData.age}
+                   onKeyDown={(e) => {
+                     if (e.key === 'Enter') {
+                       handleNext("age", (e.target as HTMLInputElement).value);
+                     }
+                   }}
+                   autoFocus
+                 />
+                 <p className="text-neutral-500 text-xs sm:text-sm">Tap Enter or Next to confirm</p>
+               </div>
+             </motion.div>
           )}
 
           {step === "goal" && (
-            <motion.div
-              key="goal"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-              className="text-center space-y-6 sm:space-y-8 w-full max-w-md bg-black/40 backdrop-blur-xl p-6 sm:p-8 border border-white/10 rounded-2xl sm:rounded-3xl"
-            >
-              <h2 className="text-2xl sm:text-3xl md:text-5xl font-heading font-black uppercase tracking-tight">Objective</h2>
-              <div className="grid grid-cols-1 gap-4">
-                <HapticButton onClick={() => handleNext("goal", "build_muscle")}>Build Muscle</HapticButton>
-                <HapticButton onClick={() => handleNext("goal", "lose_weight")}>Lose Weight</HapticButton>
-                <HapticButton onClick={() => handleNext("goal", "tone")}>Tone & Sculpt</HapticButton>
-                <HapticButton onClick={() => handleNext("goal", "endurance")}>Endurance</HapticButton>
-              </div>
-            </motion.div>
+             <motion.div
+               key="goal"
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+               className="text-center space-y-5 sm:space-y-6 md:space-y-8 w-full max-w-sm sm:max-w-md bg-black/40 backdrop-blur-xl p-5 sm:p-6 md:p-8 border border-white/10 rounded-2xl sm:rounded-3xl mx-2"
+             >
+               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading font-black uppercase tracking-tight">Objective</h2>
+               <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                 <HapticButton onClick={() => handleNext("goal", "build_muscle")}>Build Muscle</HapticButton>
+                 <HapticButton onClick={() => handleNext("goal", "lose_weight")}>Lose Weight</HapticButton>
+                 <HapticButton onClick={() => handleNext("goal", "tone")}>Tone & Sculpt</HapticButton>
+                 <HapticButton onClick={() => handleNext("goal", "endurance")}>Endurance</HapticButton>
+               </div>
+             </motion.div>
           )}
 
           {step === "occasion" && (
-            <motion.div
-              key="occasion"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-              className="text-center space-y-6 sm:space-y-8 w-full max-w-md bg-black/40 backdrop-blur-xl p-6 sm:p-8 border border-white/10 rounded-2xl sm:rounded-3xl"
-            >
-              <h2 className="text-2xl sm:text-3xl md:text-5xl font-heading font-black uppercase tracking-tight">Context</h2>
-              <div className="grid grid-cols-1 gap-4">
-                <HapticButton onClick={() => handleNext("occasion", "gym")}>Gym</HapticButton>
-                <HapticButton onClick={() => handleNext("occasion", "outdoor")}>Outdoor</HapticButton>
-                <HapticButton onClick={() => handleNext("occasion", "home")}>Home</HapticButton>
-                <HapticButton onClick={() => handleNext("occasion", "event")}>Event</HapticButton>
-              </div>
-            </motion.div>
+             <motion.div
+               key="occasion"
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+               className="text-center space-y-5 sm:space-y-6 md:space-y-8 w-full max-w-sm sm:max-w-md bg-black/40 backdrop-blur-xl p-5 sm:p-6 md:p-8 border border-white/10 rounded-2xl sm:rounded-3xl mx-2"
+             >
+               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading font-black uppercase tracking-tight">Context</h2>
+               <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                 <HapticButton onClick={() => handleNext("occasion", "gym")}>Gym</HapticButton>
+                 <HapticButton onClick={() => handleNext("occasion", "outdoor")}>Outdoor</HapticButton>
+                 <HapticButton onClick={() => handleNext("occasion", "home")}>Home</HapticButton>
+                 <HapticButton onClick={() => handleNext("occasion", "event")}>Event</HapticButton>
+               </div>
+             </motion.div>
           )}
 
           {step === "result" && isGenerating && (
